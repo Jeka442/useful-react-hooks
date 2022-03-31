@@ -1,0 +1,19 @@
+import { MutableRefObject, useEffect } from "react";
+
+export const useClickoutside = (ref: MutableRefObject<any>, callback: Function, onUnmount?:Function) => {
+    useEffect(()=>{
+        Attach();
+        return ()=>{onUnmount&&onUnmount()}
+    },[])
+  const Attach = () => {
+    document.addEventListener('click', (e) => {
+      if (
+        ref.current === null ||
+        ref.current === undefined ||
+        ref.current.contains(e.target)
+      )
+        return;
+      callback();
+    });
+  };
+};

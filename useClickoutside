@@ -1,10 +1,13 @@
-import { MutableRefObject, useEffect } from "react";
+import { useEffect, useRef } from 'react';
 
-export const useClickoutside = (ref: MutableRefObject<any>, callback: Function, onUnmount?:Function) => {
-    useEffect(()=>{
-        Attach();
-        return ()=>{onUnmount&&onUnmount()}
-    },[])
+export const useClickoutside = (callback: Function, onUnmount?: Function) => {
+  const ref = useRef<any>();
+  useEffect(() => {
+    Attach();
+    return () => {
+      onUnmount && onUnmount();
+    };
+  }, []);
   const Attach = () => {
     document.addEventListener('click', (e) => {
       if (
@@ -16,4 +19,6 @@ export const useClickoutside = (ref: MutableRefObject<any>, callback: Function, 
       callback();
     });
   };
+
+  return ref;
 };

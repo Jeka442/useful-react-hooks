@@ -1,19 +1,19 @@
 import { useState } from "react";
-import { AxiosResponse } from "axios";
+import { AxiosRequestConfig, AxiosResponse } from "axios";
 
 export const usePoster = <TResponse = any, TRequest = any, Terror = any>(
-  poster: (data: TRequest) => Promise<AxiosResponse<TResponse>>
+  poster: (data: TRequest, config?:AxiosRequestConfig) => Promise<AxiosResponse<TResponse>>
 ) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Terror | undefined>(undefined);
   const [response, setResponse] = useState<AxiosResponse<TResponse> | undefined>(undefined);
 
-  const Post = (data: TRequest) => {
+  const Post = (data: TRequest, config?:AxiosRequestConfig) => {
     if (data) setResponse(undefined);
     if (error) setError(undefined);
 
     setIsLoading(true);
-    poster(data)
+    poster(data, config)
       .then((data) => {
         if (data) {
           setIsLoading(false);
@@ -33,6 +33,8 @@ export const usePoster = <TResponse = any, TRequest = any, Terror = any>(
     Post,
   };
 };
+
+
 
 
 

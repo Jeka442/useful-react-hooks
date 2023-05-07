@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { AxiosRequestConfig, AxiosResponse } from "axios";
 
 export const usePoster = <TResponse = any, TRequest = any, Terror = any>(
@@ -13,20 +13,13 @@ export const usePoster = <TResponse = any, TRequest = any, Terror = any>(
     AxiosResponse<TResponse> | undefined
   >(undefined);
 
-  const isAlive = useRef(true);
-  useEffect(() => {
-    return () => {
-      isAlive.current = false;
-    };
-  }, []);
-
   const Post = (data: TRequest, config?: AxiosRequestConfig) => {
     if (data) setResponse(undefined);
     if (error) setError(undefined);
+
     setIsLoading(true);
     poster(data, config)
       .then((data) => {
-        if(!isAlive.current)return;
         if (data) {
           setResponse(data);
         } else {
@@ -35,7 +28,7 @@ export const usePoster = <TResponse = any, TRequest = any, Terror = any>(
         setIsLoading(false);
       })
       .catch((err) => {
-        if (isAlive.current) setIsLoading(false);
+        setIsLoading(false);
         setError(err);
       });
   };
